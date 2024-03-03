@@ -11,13 +11,12 @@ function _classPrivateFieldLooseBase(receiver, privateKey) {
   return receiver;
 }
 
-function monkeyPatch(shader, _ref) {
-  let {
-    defines = '',
-    header = '',
-    main = '',
-    ...replaces
-  } = _ref;
+function monkeyPatch(shader, {
+  defines = '',
+  header = '',
+  main = '',
+  ...replaces
+}) {
   let patchedShader = shader;
   const replaceAll = (str, find, rep) => str.split(find).join(rep);
   Object.keys(replaces).forEach(key => {
@@ -56,8 +55,6 @@ var _saveCameraProjectionMatrix = /*#__PURE__*/_classPrivateFieldLooseKey("saveC
 var _saveDimensions = /*#__PURE__*/_classPrivateFieldLooseKey("saveDimensions");
 var _saveCameraMatrices = /*#__PURE__*/_classPrivateFieldLooseKey("saveCameraMatrices");
 class ProjectedMaterial extends THREE.MeshPhysicalMaterial {
-  // internal values... they are exposed via getters
-
   get camera() {
     return _classPrivateFieldLooseBase(this, _camera)[_camera];
   }
@@ -121,16 +118,15 @@ class ProjectedMaterial extends THREE.MeshPhysicalMaterial {
     _classPrivateFieldLooseBase(this, _cover)[_cover] = cover;
     _classPrivateFieldLooseBase(this, _saveDimensions)[_saveDimensions]();
   }
-  constructor(_temp) {
-    let {
-      camera = new THREE.PerspectiveCamera(),
-      texture = new THREE.Texture(),
-      textureScale = 1,
-      textureOffset = new THREE.Vector2(),
-      backgroundOpacity = 1,
-      cover = false,
-      ...options
-    } = _temp === void 0 ? {} : _temp;
+  constructor({
+    camera = new THREE.PerspectiveCamera(),
+    texture = new THREE.Texture(),
+    textureScale = 1,
+    textureOffset = new THREE.Vector2(),
+    backgroundOpacity = 1,
+    cover = false,
+    ...options
+  } = {}) {
     if (!texture.isTexture) {
       throw new Error('Invalid texture passed to the ProjectedMaterial');
     }
@@ -147,6 +143,7 @@ class ProjectedMaterial extends THREE.MeshPhysicalMaterial {
     Object.defineProperty(this, _saveDimensions, {
       value: _saveDimensions2
     });
+    // internal values... they are exposed via getters
     Object.defineProperty(this, _camera, {
       writable: true,
       value: void 0
@@ -374,10 +371,9 @@ class ProjectedMaterial extends THREE.MeshPhysicalMaterial {
     // persist also the current camera position and matrices
     _classPrivateFieldLooseBase(this, _saveCameraMatrices)[_saveCameraMatrices]();
   }
-  projectInstanceAt(index, instancedMesh, matrixWorld, _temp2) {
-    let {
-      forceCameraSave = false
-    } = _temp2 === void 0 ? {} : _temp2;
+  projectInstanceAt(index, instancedMesh, matrixWorld, {
+    forceCameraSave = false
+  } = {}) {
     if (!instancedMesh.isInstancedMesh) {
       throw new Error(`The provided mesh is not an InstancedMesh`);
     }
